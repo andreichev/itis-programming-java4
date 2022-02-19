@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import ru.itis.controllerexample.model.Student;
 
 @Controller
 public class DefaultController {
@@ -29,7 +30,7 @@ public class DefaultController {
 
     @RequestMapping(value = "/test", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    String getStudent() {
-        return "{ \"name\": \"Ivan Ivanov\", \"university\": \"KPFU\" }";
+    Student getStudent() {
+        return new Student("Ivan", "KFU");
     }
 }
