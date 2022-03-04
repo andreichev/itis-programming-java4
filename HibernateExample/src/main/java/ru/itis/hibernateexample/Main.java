@@ -22,9 +22,9 @@ public class Main {
             session.getTransaction().begin();
 
             // HQL
-            // select * from driver
-            String hql1 = "select d from Driver d";
-            // Create Query object
+            //  select * from driver
+            String hql1 = "from Driver";
+            //  Create Query object
             Query<Driver> query1 = session.createQuery(hql1);
             List<Driver> drivers = query1.getResultList();
             for (Driver driver : drivers) {
@@ -34,6 +34,7 @@ public class Main {
             // HQL
             // select * from driver
             String hql2 = "select c from Car c left join Driver d on c.driver = d";
+            // String hql2 = "from Car";
             // Create Query object.
             Query<Car> query2 = session.createQuery(hql2);
             List<Car> cars = query2.getResultList();
@@ -58,6 +59,8 @@ public class Main {
             e.printStackTrace();
             // Rollback in case of an error occurred.
             session.getTransaction().rollback();
+        } finally {
+            HibernateConfig.shutdown();
         }
     }
 }

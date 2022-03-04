@@ -26,7 +26,7 @@
         <!-- Echo all executed SQL to stdout -->
         <property name="show_sql">true</property>
         <property name="format_sql">true</property>
-        <property name="hibernate.hbm2ddl.auto">create</property>
+        <property name="hibernate.hbm2ddl.auto">update</property>
 
         <mapping class="ru.itis.hibernateexample.model.Driver" />
         <mapping class="ru.itis.hibernateexample.model.Car" />
