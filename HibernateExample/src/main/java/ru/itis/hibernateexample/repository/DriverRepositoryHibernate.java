@@ -22,8 +22,5 @@ public class DriverRepositoryHibernate implements CrudRepository<Driver, Long> {
     }
 
     @Override
-    public void update(Long id, Driver item) {}
-
-    @Override
     public void delete(Long id) {}
 }
