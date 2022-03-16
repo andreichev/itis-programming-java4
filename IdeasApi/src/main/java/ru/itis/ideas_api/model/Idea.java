@@ -1,11 +1,12 @@
 package ru.itis.ideas_api.model;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import java.util.List;
 
-@Builder
+@SuperBuilder
 @Getter
 @Setter
 @AllArgsConstructor

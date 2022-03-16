@@ -22,13 +22,12 @@ public class IdeaDto {
     private List<CommentDto> comments;
 
     public Idea mapToIdea() {
-        Idea idea = Idea.builder()
+        return Idea.builder()
+                .id(id)
                 .name(name)
                 .description(description)
                 .likesCount(likesCount)
                 .build();
-        idea.setId(id);
-        return idea;
     }
 
     public static IdeaDto getDto(Idea idea) {
@@ -37,6 +36,8 @@ public class IdeaDto {
                 .name(idea.getName())
                 .description(idea.getDescription())
                 .likesCount(idea.getLikesCount())
+                .author(UserDto.getDto(idea.getAuthor()))
+                .authorId(idea.getAuthor().getId())
                 .build();
     }
 }
