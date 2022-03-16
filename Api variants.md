@@ -20,7 +20,7 @@
         - can car go out of parking?
         - park car
 
-3) ### HOSPITAL (CINEMA, RESTAURANT ...):
+3) ### HOSPITAL (CINEMA, RESTAURANT, CEMETERY, ...):
     - model:
         - doctor (firstName, lastName, cabinetNumber, specialization, schedule)
         - specializations (name)
@@ -40,3 +40,14 @@
         - registration, authorization
         - make, delete chat chatRoom
         - send, delete, edit message
+
+5) ### ROOMS BOOKING:
+    - model:
+        - user (name, email, team, role)
+        - team (name, users)
+        - room (capacity, number)
+        - booking (room, owner, team, timeSlot)
+        - timeSlot (start, end)
+    - requests:
+        - is room free for timeSlot?
+        - make, undo, booking
