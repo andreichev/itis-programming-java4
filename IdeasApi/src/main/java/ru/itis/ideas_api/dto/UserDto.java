@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.itis.ideas_api.model.Idea;
 import ru.itis.ideas_api.model.User;
 
 import java.util.List;

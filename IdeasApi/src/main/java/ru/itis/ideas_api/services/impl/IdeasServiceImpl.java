@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import ru.itis.ideas_api.dto.IdeaDto;
+import ru.itis.ideas_api.mapper.IdeasMapper;
 import ru.itis.ideas_api.model.Idea;
 import ru.itis.ideas_api.model.User;
 import ru.itis.ideas_api.repository.IdeasRepository;
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
 public class IdeasServiceImpl implements IdeasService {
     private final UsersRepository usersRepository;
     private final IdeasRepository ideasRepository;
+    private final IdeasMapper ideasMapper;
 
     @Override
     public IdeaDto saveIdea(IdeaDto ideaDto) {
@@ -28,10 +30,10 @@ public class IdeasServiceImpl implements IdeasService {
             // TODO: use custom exception
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("USER WITH ID %d NOT FOUND", ideaDto.getAuthorId()));
         }
-        Idea idea = ideaDto.mapToIdea();
+        Idea idea = ideasMapper.getIdea(ideaDto);
         idea.setAuthor(optionalUser.get());
         Idea savedIdea = ideasRepository.save(idea);
-        return IdeaDto.getDto(savedIdea);
+        return ideasMapper.getDto(savedIdea);
     }
 
     @Override
@@ -41,13 +43,13 @@ public class IdeasServiceImpl implements IdeasService {
             // TODO: use custom exception
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("IDEA WITH ID %d NOT FOUND", id));
         }
-        return IdeaDto.getDto(optionalIdea.get());
+        return ideasMapper.getDto(optionalIdea.get());
     }
 
     @Override
     public List<IdeaDto> getAll() {
         return ideasRepository.findAll().stream()
-                .map(IdeaDto::getDto)
+                .map(ideasMapper::getDto)
                 .collect(Collectors.toList());
     }
 }

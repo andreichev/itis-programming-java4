@@ -52,7 +52,9 @@ public class Main {
                     .lastName(lastName)
                     .age(age)
                     .build();
-            session.save(driver);
+            Long id = (Long) session.save(driver);
+            driver.setId(id);
+            System.out.println(String.format("Created driver with id: %d", id));
 
             session.getTransaction().commit();
         } catch (Exception e) {
