@@ -5,7 +5,7 @@ import org.mapstruct.Mapping;
 import ru.itis.ideas_api.dto.IdeaDto;
 import ru.itis.ideas_api.model.Idea;
 
-@Mapper
+@Mapper(uses = {UserMapper.class})
 public interface IdeasMapper {
     @Mapping(target = "comments", ignore = true)
     IdeaDto getDto(Idea idea);
