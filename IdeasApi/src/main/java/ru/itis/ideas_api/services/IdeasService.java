@@ -8,4 +8,5 @@ public interface IdeasService {
     IdeaDto saveIdea(IdeaDto ideaDto);
     IdeaDto getIdea(Long id);
     List<IdeaDto> getAll();
+    void delete(Long id);
 }
