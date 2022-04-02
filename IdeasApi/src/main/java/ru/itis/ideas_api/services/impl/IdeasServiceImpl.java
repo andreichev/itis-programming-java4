@@ -1,10 +1,10 @@
 package ru.itis.ideas_api.services.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 import ru.itis.ideas_api.dto.IdeaDto;
+import ru.itis.ideas_api.exceptions.ErrorEntity;
+import ru.itis.ideas_api.exceptions.ValidationException;
 import ru.itis.ideas_api.mapper.IdeasMapper;
 import ru.itis.ideas_api.model.Idea;
 import ru.itis.ideas_api.model.User;
@@ -13,9 +13,7 @@ import ru.itis.ideas_api.repository.UsersRepository;
 import ru.itis.ideas_api.services.IdeasService;
 
 import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
 import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -33,14 +31,12 @@ public class IdeasServiceImpl implements IdeasService {
     public IdeaDto saveIdea(IdeaDto ideaDto) {
         Set<ConstraintViolation<IdeaDto>> violations = validator.validate(ideaDto);
         if(violations.isEmpty() == false) {
-            // TODO: use custom exception
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, violations.stream().findFirst().get().getMessage());
+            throw new ValidationException(violations.stream().findFirst().get().getMessage());
         }
 
         Optional<User> optionalUser = usersRepository.findById(ideaDto.getAuthorId());
         if(optionalUser.isPresent() == false) {
-            // TODO: use custom exception
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("USER WITH ID %d NOT FOUND", ideaDto.getAuthorId()));
+            throw new ValidationException(ErrorEntity.USER_NOT_FOUND);
         }
         Idea idea = ideasMapper.getIdea(ideaDto);
         idea.setAuthor(optionalUser.get());
@@ -52,8 +48,7 @@ public class IdeasServiceImpl implements IdeasService {
     public IdeaDto getIdea(Long id) {
         Optional<Idea> optionalIdea = ideasRepository.findById(id);
         if(optionalIdea.isPresent() == false) {
-            // TODO: use custom exception
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("IDEA WITH ID %d NOT FOUND", id));
+            throw new ValidationException(ErrorEntity.IDEA_NOT_FOUND);
         }
         return ideasMapper.getDto(optionalIdea.get());
     }

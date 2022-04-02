@@ -15,13 +15,13 @@ import java.util.List;
 @Builder
 public class IdeaDto {
     private Long id;
-    @NotBlank
+    @NotBlank(message = "BLANK_IDEA_NAME")
     private String name;
-    @NotBlank
+    @NotBlank(message = "BLANK_IDEA_DESCRIPTION")
     private String description;
     private Integer likesCount;
     private UserDto author;
-    @NotNull
+    @NotNull(message = "USER_ID_EMPTY")
     private Long authorId;
     private List<CommentDto> comments;
 }
