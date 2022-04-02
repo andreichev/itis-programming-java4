@@ -12,8 +12,13 @@ import ru.itis.ideas_api.repository.IdeasRepository;
 import ru.itis.ideas_api.repository.UsersRepository;
 import ru.itis.ideas_api.services.IdeasService;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,6 +30,11 @@ public class IdeasServiceImpl implements IdeasService {
 
     @Override
     public IdeaDto saveIdea(IdeaDto ideaDto) {
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        Validator validator = factory.getValidator();
+        Set<ConstraintViolation<IdeaDto>> violations = validator.validate(ideaDto);
+        violations.forEach(item -> System.out.println(item.getMessage()));
+
         Optional<User> optionalUser = usersRepository.findById(ideaDto.getAuthorId());
         if(optionalUser.isPresent() == false) {
             // TODO: use custom exception
