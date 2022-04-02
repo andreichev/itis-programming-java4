@@ -27,13 +27,15 @@ public class IdeasServiceImpl implements IdeasService {
     private final UsersRepository usersRepository;
     private final IdeasRepository ideasRepository;
     private final IdeasMapper ideasMapper;
+    private final Validator validator;
 
     @Override
     public IdeaDto saveIdea(IdeaDto ideaDto) {
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        Validator validator = factory.getValidator();
         Set<ConstraintViolation<IdeaDto>> violations = validator.validate(ideaDto);
-        violations.forEach(item -> System.out.println(item.getMessage()));
+        if(violations.isEmpty() == false) {
+            // TODO: use custom exception
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, violations.stream().findFirst().get().getMessage());
+        }
 
         Optional<User> optionalUser = usersRepository.findById(ideaDto.getAuthorId());
         if(optionalUser.isPresent() == false) {
