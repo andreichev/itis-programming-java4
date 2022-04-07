@@ -27,4 +27,9 @@ public class IdeasController {
     IdeaDto getById(@PathVariable Long id) {
         return ideasService.getIdea(id);
     }
+
+    @DeleteMapping("/{id}")
+    void delete(@PathVariable Long id) {
+        ideasService.delete(id);
+    }
 }

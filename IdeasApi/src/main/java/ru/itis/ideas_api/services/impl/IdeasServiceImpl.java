@@ -59,4 +59,11 @@ public class IdeasServiceImpl implements IdeasService {
                 .map(ideasMapper::getDto)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public void delete(Long id) {
+        ideasRepository.findById(id)
+                .orElseThrow(() -> new ValidationException(ErrorEntity.IDEA_NOT_FOUND));
+        ideasRepository.deleteById(id);
+    }
 }

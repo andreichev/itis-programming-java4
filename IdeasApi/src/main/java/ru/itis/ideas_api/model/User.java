@@ -14,11 +14,9 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "users")
 public class User extends AbstractEntity {
-    @Column(name = "first_name")
-    private String firstName;
-    @Column(name = "last_name")
-    private String lastName;
-    @Column(name = "password")
-    private String hashPassword;
-    private String email;
+    @Column(name = "user_name")
+    private String name;
+    @Column(unique = true)
+    private String phone;
+    private String token;
 }

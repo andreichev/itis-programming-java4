@@ -1,10 +1,7 @@
 package ru.itis.ideas_api.exceptions;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
-import org.hibernate.annotations.common.util.impl.LoggerFactory;
-import org.jboss.logging.Logger;
 
 @Getter
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
@@ -14,6 +11,10 @@ public enum ErrorEntity {
     INVALID_TOKEN(403, "Ошибка авторизации"),
     NOT_FOUND(404, "Не найдено"),
     EMAIL_ALREADY_TAKEN(453, "Email уже занят"),
+
+    // Отправка смс
+    PHONE_NOT_FOUND(404, "На этот телефон не был отправлен код."),
+    INVALID_OTP(450, "Неверный код"),
 
     // Ошбика создания Idea
     BLANK_IDEA_NAME(454, "Имя не может быть пустым"),
@@ -38,18 +39,9 @@ public enum ErrorEntity {
     int status;
     String message;
 
-    @JsonIgnore
-    String validatorKey;
-    @JsonIgnore
-    Logger log = LoggerFactory.logger(ErrorEntity.class);
-
     ErrorEntity(int status, String message) {
         this.status = status;
         this.message = message;
-    }
-
-    public void log() {
-        log.error("Ошибка " + status + ": " + message);
     }
 
     @Override
