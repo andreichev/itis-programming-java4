@@ -30,12 +30,12 @@ public class IdeasServiceImpl implements IdeasService {
     @Override
     public IdeaDto saveIdea(IdeaDto ideaDto) {
         Set<ConstraintViolation<IdeaDto>> violations = validator.validate(ideaDto);
-        if(violations.isEmpty() == false) {
+        if (violations.isEmpty() == false) {
             throw new ValidationException(violations.stream().findFirst().get().getMessage());
         }
 
         Optional<User> optionalUser = usersRepository.findById(ideaDto.getAuthorId());
-        if(optionalUser.isPresent() == false) {
+        if (optionalUser.isPresent() == false) {
             throw new ValidationException(ErrorEntity.USER_NOT_FOUND);
         }
         Idea idea = ideasMapper.getIdea(ideaDto);
@@ -47,7 +47,7 @@ public class IdeasServiceImpl implements IdeasService {
     @Override
     public IdeaDto getIdea(Long id) {
         Optional<Idea> optionalIdea = ideasRepository.findById(id);
-        if(optionalIdea.isPresent() == false) {
+        if (optionalIdea.isPresent() == false) {
             throw new ValidationException(ErrorEntity.IDEA_NOT_FOUND);
         }
         return ideasMapper.getDto(optionalIdea.get());

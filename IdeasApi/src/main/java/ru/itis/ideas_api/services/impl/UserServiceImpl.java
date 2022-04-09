@@ -28,16 +28,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void checkOtp(String phone, String code) {
+    public String checkOtp(String phone, String code) {
         OtpPhoneCode otpPhoneCode = codesRepository.findByPhone(phone)
                 .orElseThrow(() -> new ValidationException(ErrorEntity.PHONE_NOT_FOUND));
-        if(otpPhoneCode.getCode().equals(code) == false) {
+        if (otpPhoneCode.getCode().equals(code) == false) {
             throw new ValidationException(ErrorEntity.INVALID_OTP);
         }
         codesRepository.delete(otpPhoneCode);
         User user = usersRepository.findByPhone(phone)
                 .orElse(User.builder().phone(phone).build());
-        user.setToken(UUID.randomUUID().toString());
+        String token = UUID.randomUUID().toString();
+        user.setToken(token);
         usersRepository.save(user);
+        return token;
     }
 }

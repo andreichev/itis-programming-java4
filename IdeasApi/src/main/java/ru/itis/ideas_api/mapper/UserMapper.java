@@ -7,5 +7,6 @@ import ru.itis.ideas_api.model.User;
 @Mapper
 public interface UserMapper {
     UserDto getDto(User user);
+
     User getUser(UserDto userDto);
 }

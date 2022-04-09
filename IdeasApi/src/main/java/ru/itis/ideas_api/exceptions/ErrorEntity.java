@@ -29,7 +29,7 @@ public enum ErrorEntity {
     INVALID_EMAIL(461, "Некорректный Email"),
 
     // Вход
-    USER_NOT_FOUND(404,"Пользователь не найден"),
+    USER_NOT_FOUND(404, "Пользователь не найден"),
     INCORRECT_PASSWORD(460, "Неверный пароль"),
 
     // Выгрузка картинки
