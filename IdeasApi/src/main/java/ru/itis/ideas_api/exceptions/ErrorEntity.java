@@ -13,6 +13,7 @@ public enum ErrorEntity {
     EMAIL_ALREADY_TAKEN(453, "Email уже занят"),
 
     // Отправка смс
+    TOO_OFTEN_OTP(455, "Слишком мало времени прошло с отправки предыдущей смс."),
     PHONE_NOT_FOUND(404, "На этот телефон не был отправлен код."),
     INVALID_OTP(450, "Неверный код"),
 

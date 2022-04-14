@@ -1,6 +1,7 @@
 package ru.itis.ideas_api.services.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import ru.itis.ideas_api.exceptions.ErrorEntity;
 import ru.itis.ideas_api.exceptions.ValidationException;
@@ -10,6 +11,8 @@ import ru.itis.ideas_api.repository.OtpPhoneCodesRepository;
 import ru.itis.ideas_api.repository.UsersRepository;
 import ru.itis.ideas_api.services.UserService;
 
+import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -20,10 +23,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void sendOtp(String phone) {
-        OtpPhoneCode code = OtpPhoneCode.builder()
-                .code("0000")
-                .phone(phone)
-                .build();
+        String newCode = String.valueOf(System.currentTimeMillis() % 10000);
+        OtpPhoneCode code = codesRepository.findByPhone(phone)
+                .orElse(
+                        OtpPhoneCode.builder()
+                                .phone(phone)
+                                .build()
+                );
+        code.setCode(newCode);
+        if(code.getUpdatedAt() != null &&
+           code.getUpdatedAt().plusSeconds(10).compareTo(Instant.now()) >= 0) {
+            throw new ValidationException(ErrorEntity.TOO_OFTEN_OTP);
+        }
         codesRepository.save(code);
     }
 
@@ -41,5 +52,13 @@ public class UserServiceImpl implements UserService {
         user.setToken(token);
         usersRepository.save(user);
         return token;
+    }
+
+    @Scheduled(fixedRate = 20000)
+    public void deleteOldCodes() {
+        List<OtpPhoneCode> codes = codesRepository.findAllByUpdatedAtBefore(
+                Instant.now().minusSeconds(20)
+        );
+        codesRepository.deleteAll(codes);
     }
 }

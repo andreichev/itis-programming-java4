@@ -45,8 +45,6 @@ public class AuthFilter extends GenericFilterBean {
                 Authentication auth = new UsernamePasswordAuthenticationToken(user, user.getToken(), authorities);
                 securityContext = SecurityContextHolder.getContext();
                 securityContext.setAuthentication(auth);
-//                HttpSession session = ((HttpServletRequest) servletRequest).getSession(true);
-//                session.setAttribute(SPRING_SECURITY_CONTEXT_KEY, securityContext);
             } else {
                 securityContext.setAuthentication(null);
             }
