@@ -1,11 +1,14 @@
 package ru.itis.ideas_api.services.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import ru.itis.ideas_api.dto.IdeaDto;
 import ru.itis.ideas_api.exceptions.ErrorEntity;
+import ru.itis.ideas_api.exceptions.NotFoundException;
 import ru.itis.ideas_api.exceptions.ValidationException;
 import ru.itis.ideas_api.mapper.IdeasMapper;
+import ru.itis.ideas_api.mapper.ViolationsToErrorMapper;
 import ru.itis.ideas_api.model.Idea;
 import ru.itis.ideas_api.model.User;
 import ru.itis.ideas_api.repository.IdeasRepository;
@@ -22,7 +25,6 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class IdeasServiceImpl implements IdeasService {
-    private final UsersRepository usersRepository;
     private final IdeasRepository ideasRepository;
     private final IdeasMapper ideasMapper;
     private final Validator validator;
@@ -31,15 +33,11 @@ public class IdeasServiceImpl implements IdeasService {
     public IdeaDto saveIdea(IdeaDto ideaDto) {
         Set<ConstraintViolation<IdeaDto>> violations = validator.validate(ideaDto);
         if (violations.isEmpty() == false) {
-            throw new ValidationException(violations.stream().findFirst().get().getMessage());
+            throw new ValidationException(ViolationsToErrorMapper.toDto(violations.toArray()));
         }
-
-        Optional<User> optionalUser = usersRepository.findById(ideaDto.getAuthorId());
-        if (optionalUser.isPresent() == false) {
-            throw new ValidationException(ErrorEntity.USER_NOT_FOUND);
-        }
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Idea idea = ideasMapper.getIdea(ideaDto);
-        idea.setAuthor(optionalUser.get());
+        idea.setAuthor(user);
         Idea savedIdea = ideasRepository.save(idea);
         return ideasMapper.getDto(savedIdea);
     }
@@ -48,7 +46,7 @@ public class IdeasServiceImpl implements IdeasService {
     public IdeaDto getIdea(Long id) {
         Optional<Idea> optionalIdea = ideasRepository.findById(id);
         if (optionalIdea.isPresent() == false) {
-            throw new ValidationException(ErrorEntity.IDEA_NOT_FOUND);
+            throw new NotFoundException(ErrorEntity.IDEA_NOT_FOUND);
         }
         return ideasMapper.getDto(optionalIdea.get());
     }
@@ -63,7 +61,7 @@ public class IdeasServiceImpl implements IdeasService {
     @Override
     public void delete(Long id) {
         ideasRepository.findById(id)
-                .orElseThrow(() -> new ValidationException(ErrorEntity.IDEA_NOT_FOUND));
+                .orElseThrow(() -> new NotFoundException(ErrorEntity.IDEA_NOT_FOUND));
         ideasRepository.deleteById(id);
     }
 }

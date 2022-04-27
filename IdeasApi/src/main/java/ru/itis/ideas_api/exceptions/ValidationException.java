@@ -1,23 +1,19 @@
 package ru.itis.ideas_api.exceptions;
 
 import lombok.Getter;
+import ru.itis.ideas_api.dto.ErrorDto;
+
+import java.util.Collections;
 
 @Getter
 public class ValidationException extends RuntimeException {
-    private final ErrorEntity entity;
+    private final ErrorDto errorDto;
 
-    public ValidationException(ErrorEntity entity) {
-        super(entity.getMessage());
-        this.entity = entity;
+    public ValidationException(ErrorDto errorDto) {
+        this.errorDto = errorDto;
     }
 
-    public ValidationException(String entityRawValue) {
-        super(entityRawValue);
-        this.entity = ErrorEntity.valueOf(entityRawValue);
-    }
-
-    public ValidationException(ErrorEntity entity, String message) {
-        super(message);
-        this.entity = entity;
+    public ValidationException(ErrorEntity error) {
+        this.errorDto = new ErrorDto(Collections.singletonList(error));
     }
 }

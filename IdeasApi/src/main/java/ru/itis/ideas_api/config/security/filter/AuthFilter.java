@@ -35,7 +35,6 @@ public class AuthFilter extends GenericFilterBean {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        SecurityContext securityContext = SecurityContextHolder.getContext();
         String token = getTokenFromRequest((HttpServletRequest) servletRequest);
         if (token != null) {
             Optional<User> optionalUser = usersRepository.findByToken(token);
@@ -43,13 +42,8 @@ public class AuthFilter extends GenericFilterBean {
                 User user = optionalUser.get();
                 Collection<? extends GrantedAuthority> authorities = Collections.singleton(Role.ROLE_USER);
                 Authentication auth = new UsernamePasswordAuthenticationToken(user, user.getToken(), authorities);
-                securityContext = SecurityContextHolder.getContext();
-                securityContext.setAuthentication(auth);
-            } else {
-                securityContext.setAuthentication(null);
+                SecurityContextHolder.getContext().setAuthentication(auth);
             }
-        } else {
-            SecurityContextHolder.getContext().setAuthentication(null);
         }
         filterChain.doFilter(servletRequest, servletResponse);
     }

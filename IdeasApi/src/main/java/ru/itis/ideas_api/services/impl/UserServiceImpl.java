@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import ru.itis.ideas_api.exceptions.ErrorEntity;
+import ru.itis.ideas_api.exceptions.NotFoundException;
 import ru.itis.ideas_api.exceptions.ValidationException;
 import ru.itis.ideas_api.model.OtpPhoneCode;
 import ru.itis.ideas_api.model.User;
@@ -12,7 +13,6 @@ import ru.itis.ideas_api.repository.UsersRepository;
 import ru.itis.ideas_api.services.UserService;
 
 import java.time.Instant;
-import java.util.List;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public String checkOtp(String phone, String code) {
         OtpPhoneCode otpPhoneCode = codesRepository.findByPhone(phone)
-                .orElseThrow(() -> new ValidationException(ErrorEntity.PHONE_NOT_FOUND));
+                .orElseThrow(() -> new NotFoundException(ErrorEntity.PHONE_NOT_FOUND));
         if (otpPhoneCode.getCode().equals(code) == false) {
             throw new ValidationException(ErrorEntity.INVALID_OTP);
         }
@@ -55,10 +55,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Scheduled(fixedRate = 20000)
+    @Override
     public void deleteOldCodes() {
-        List<OtpPhoneCode> codes = codesRepository.findAllByUpdatedAtBefore(
-                Instant.now().minusSeconds(20)
+        codesRepository.deleteByUpdatedAtBefore(
+                Instant.now().minusSeconds(5)
         );
-        codesRepository.deleteAll(codes);
     }
 }
