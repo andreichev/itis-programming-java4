@@ -24,6 +24,12 @@ public enum ErrorEntity {
     // Получение Idea
     IDEA_NOT_FOUND(9, "Запись не найдена"),
 
+    // Ошбика создания Comment
+    BLANK_COMMENT_TEXT(454, "Комментарий не может быть пустым"),
+
+    // Получение Comment
+    COMMENT_NOT_FOUND(404, "Комментарий не найден"),
+
     // Регистрация
     PASSWORD_TOO_SHORT(10, "Пароль слишком короткий"),
     INVALID_EMAIL(11, "Некорректный Email"),
