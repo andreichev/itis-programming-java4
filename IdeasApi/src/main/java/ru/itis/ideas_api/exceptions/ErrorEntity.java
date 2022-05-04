@@ -33,6 +33,7 @@ public enum ErrorEntity {
     // Регистрация
     PASSWORD_TOO_SHORT(10, "Пароль слишком короткий"),
     INVALID_EMAIL(11, "Некорректный Email"),
+    BLANK_PHONE(461, "Некорректный телефон"),
 
     // Вход
     USER_NOT_FOUND(12, "Пользователь не найден"),
