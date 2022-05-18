@@ -19,6 +19,7 @@ import javax.persistence.Table;
 @Table(name = "otp_codes")
 public class OtpPhoneCode extends AbstractEntity {
     @Column(unique = true)
+    @Phone
     private String phone;
     private String code;
 }
