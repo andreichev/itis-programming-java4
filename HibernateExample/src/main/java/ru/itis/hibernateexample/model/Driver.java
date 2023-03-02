@@ -1,15 +1,13 @@
 package ru.itis.hibernateexample.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
 
-@Data
 @Builder
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -22,6 +20,16 @@ public class Driver {
     @Column(name = "last_name")
     private String lastName;
     private Integer age;
-//    @OneToMany
-//    List<Car> cars;
+    @OneToMany(mappedBy = "driver", fetch = FetchType.LAZY)
+    List<Car> cars;
+
+    @Override
+    public String toString() {
+        return "Driver " +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", age=" + age +
+            ", carsCount=" + cars.size();
+    }
 }

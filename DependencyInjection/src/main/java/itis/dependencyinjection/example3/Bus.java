@@ -4,6 +4,10 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class Bus implements ReachType {
+    public Bus() {
+        System.out.println("BUS INIT");
+    }
+
     @Override
     public void driveToSchool() {
         System.out.println("Выйди из дома");

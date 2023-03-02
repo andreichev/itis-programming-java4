@@ -1,4 +1,4 @@
-package ru.itis.hibernateexample;
+package ru.itis.hibernateexample.session_example;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -23,9 +23,9 @@ public class Main {
 
             // HQL
             //  select * from driver
-            String hql1 = "from Driver";
+            String hql1 = "select d from Driver d";
             //  Create Query object
-            Query<Driver> query1 = session.createQuery(hql1);
+            Query<Driver> query1 = session.createQuery(hql1, Driver.class);
             List<Driver> drivers = query1.getResultList();
             for (Driver driver : drivers) {
                 System.out.println(driver.getFirstName());
