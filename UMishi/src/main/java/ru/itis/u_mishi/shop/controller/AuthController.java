@@ -22,6 +22,7 @@ public class AuthController {
         return authService.sendSms(request);
     }
 
+    @PostMapping("/check-code")
     CheckCodeResponse checkCode(@RequestBody CheckCodeRequest request) {
         return authService.checkCode(request);
     }
