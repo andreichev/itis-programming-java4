@@ -30,19 +30,29 @@ public class AuthFilter extends GenericFilterBean {
     private static final String AUTHORIZATION = "Authorization";
     private static final String BEARER = "Bearer ";
 
+    private final JwtHelper jwtHelper;
     private final UserRepository usersRepository;
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         String token = getTokenFromRequest((HttpServletRequest) servletRequest);
-        if (token != null) {
-            Optional<User> optionalUser = usersRepository.findByToken(token);
-            if (optionalUser.isPresent()) {
-                User user = optionalUser.get();
-                Collection<? extends GrantedAuthority> authorities = Collections.singleton(Role.ROLE_USER);
-                Authentication auth = new UsernamePasswordAuthenticationToken(user, user.getToken(), authorities);
-                SecurityContextHolder.getContext().setAuthentication(auth);
-            }
+        if (token == null) {
+            filterChain.doFilter(servletRequest, servletResponse);
+            return;
+        }
+
+        if(jwtHelper.validateToken(token) == false) {
+            filterChain.doFilter(servletRequest, servletResponse);
+            return;
+        }
+
+        String id = jwtHelper.getIdFromToken(token);
+        Optional<User> optionalUser = usersRepository.findById(Integer.parseInt(id));
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            Collection<GrantedAuthority> authorities = Collections.singleton(Role.ROLE_USER);
+            Authentication auth = new UsernamePasswordAuthenticationToken(user, null, authorities);
+            SecurityContextHolder.getContext().setAuthentication(auth);
         }
         filterChain.doFilter(servletRequest, servletResponse);
     }

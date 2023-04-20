@@ -17,5 +17,4 @@ public class User extends AbstractEntity {
     String username;
     @Column(unique = true)
     private String phone;
-    private String token;
 }

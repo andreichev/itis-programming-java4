@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.Properties;
 
 @EnableWebMvc
-// @EnableScheduling
+@EnableScheduling
 @ComponentScan("ru.itis.u_mishi.shop")
 @PropertySource("classpath:application.properties")
 @EnableJpaRepositories("ru.itis.u_mishi.shop.repository")
