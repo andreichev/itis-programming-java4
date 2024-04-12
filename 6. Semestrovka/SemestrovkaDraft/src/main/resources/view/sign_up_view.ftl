@@ -1,12 +1,12 @@
 <html lang="en">
 
 <head>
-    <title>Welcome to AHMED!</title>
+    <title>REGISTRATION!</title>
     <link rel="stylesheet" href="/res/style.css">
 </head>
 
 <body>
-<h1>SIGN IN</h1>
+<h1>SIGN UP</h1>
 <#if error?? && error=='true'>
     <div class="error">AHMED!</div>
 </#if>
@@ -16,6 +16,6 @@
     <input type="submit" value="SUBMIT">
 </form>
 
-<div>Dont have an account?</div>
-<a href="/sign-up">SIGN UP</a>
+<div>Already have an account?</div>
+<a href="/sign-in">SIGN IN</a>
 </body>

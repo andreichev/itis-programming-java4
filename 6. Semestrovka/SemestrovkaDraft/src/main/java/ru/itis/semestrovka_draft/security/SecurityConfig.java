@@ -8,7 +8,6 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractAuthenticationFilterConfigurer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -19,7 +18,7 @@ import ru.itis.semestrovka_draft.services.AuthService;
 @RequiredArgsConstructor
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
-    static final String[] PERMIT = {"/res/**"};
+    static final String[] PERMIT = {"/res/**", "/sign-up"};
 
     private final PasswordEncoder passwordEncoder;
     private final AuthService authService;
@@ -31,14 +30,13 @@ public class SecurityConfig {
                         .requestMatchers(PERMIT).permitAll()
                         .anyRequest().authenticated()
                 )
-                 .formLogin( form ->
-                     form
-                             .loginPage("/sign-in")
-                             .successForwardUrl("/test")
-                             .defaultSuccessUrl("/test")
-                             .failureUrl("/sign-in?error=true")
-                             .permitAll()
-                 )
+                .formLogin(form ->
+                        form
+                                .loginPage("/sign-in")
+                                .defaultSuccessUrl("/test")
+                                .failureUrl("/sign-in?error=true")
+                                .permitAll()
+                )
                 .csrf(AbstractHttpConfigurer::disable)
                 // .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
                 .build();
