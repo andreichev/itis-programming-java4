@@ -1,5 +1,6 @@
 package ru.itis.semestrovka_draft.controller;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,7 +29,7 @@ public class AuthorizationController {
     }
 
     @PostMapping("/sign-up")
-    String signUp(@ModelAttribute RegistrationForm form) throws UserAlreadyExistsException {
+    String signUp(@ModelAttribute @Valid RegistrationForm form) throws UserAlreadyExistsException {
         authService.register(form);
         return "redirect:/test";
     }
